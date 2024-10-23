@@ -1,0 +1,11 @@
+ParmList().Format("Ok {} Done {} records", filename, recnum);
+ParmList().Format("Ok {} Done {} records", filename, recnum);
+ParmList().Format("{}:{:02}:{:02}.{:03} No of condensed LegsPlus objects = {} which is {}% of the original number {}", elapse.m_hrs, elapse.m_mins, elapse.m_secs, elapse.m_millies, condense, (int)(100 * condense / legsbeforecondense), legsbeforecondense);
+ParmList().Format("{} File {}, warming up", filename, ParmList().GetFilename(filename));
+ParmList().Output(QOOutput::OutNormal, "!! No CCDCity file parameter is defined or cannot open the file");
+ParmList().Format("{} File {}, warming up", filename, ParmList().GetFilename(filename));
+ParmList().Format("!! {} Not done, {}, records read {}: {}", filename, recnum ? "an error detected" : "parameter not defined",recnum, exception.what());
+ParmList().Output(QOOutput::OutNormal, "!! No CCDCity file parameter is defined or cannot open the file");
+Output().Format(QOOutput::LogFile, "No Template: {}", command);
+iofileoutput.Format("{}\t{} done, processed {} commands, TPS: {:.3}", QOUtil::local_tstamp(), TaskCmd::GenerateCommandsDB, processed.load(), tps);
+Output().Format(QOOutput::LogFile, "      Prohibit Sales CC DB contains {} flight legs. Flights departed before {:.10} removed: {}", retained, past, removed);
