@@ -44,7 +44,7 @@ namespace FormatConverter.Tests
                 Assert.Equal(testCase.Expected, result);
             }
         }
-           [Fact]
+        [Fact]
         public void TestOutputArgConversionFIle()
         {
             // Read test cases from files

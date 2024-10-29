@@ -1,3 +1,4 @@
+QONumaMemory::Output().OutputArg(QOOutput::OutNormal, "Second PdhEnumObjectItems failed with %x.", status);
 ParmList().OutputArg("Ok %s Done %i records", filename, recnum);
 ParmList().OutputArg(QOOutput::OutNormal, "Ok %s Done %i records", filename, recnum);
 ParmList().OutputArg(QOOutput::OutNormal,"%d:%02d:%02d.%03d No of condensed LegsPlus objects = %ld which is %d%% of the original number %ld", elapse.m_hrs, elapse.m_mins, elapse.m_secs, elapse.m_millies, condense, (int)(100 * condense / legsbeforecondense), legsbeforecondense);

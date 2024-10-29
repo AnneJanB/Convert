@@ -31,7 +31,7 @@ namespace FormatConverter
             string stdFormatString = Regex.Replace(intermediateFormatString, @"%([-+ 0#']*\d*(\.\d+)?)([sdixXuofcp%])", match2 =>
             {
                 string widthPrecision = match2.Groups[1].Value;
-                string typeSpecifier = match2.Groups[2].Value;
+                string typeSpecifier = match2.Groups[3].Value;
 
                 // Add colon if width/precision is present or if typeSpecifier is x or X
                 if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
@@ -59,8 +59,11 @@ namespace FormatConverter
             stdFormatString = stdFormatString.Replace("__PERCENT__", "%");
 
             // Handle %.*s pattern for std::string_view
-            stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{}");
-            remainingArgs = Regex.Replace(remainingArgs, @"(\w+)\.size\(\)\s*,\s*(\w+)\.data\(\)\s*,?", "$2, ");
+            if (stdFormatString.Contains("%.*s"))
+            {
+              stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{}");
+              remainingArgs = Regex.Replace(remainingArgs, @"(\w+)\.size\(\)\s*,\s*(\w+)\.data\(\)\s*,?", "$2, ");
+            }
 
             // Remove all .c_str() in remainingArgs
             remainingArgs = Regex.Replace(remainingArgs, @"\.c_str\(\)", "");
