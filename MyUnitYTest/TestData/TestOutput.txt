@@ -9,3 +9,5 @@ ParmList().Output(QOOutput::OutNormal, "!! No CCDCity file parameter is defined 
 Output().Format(QOOutput::LogFile, "No Template: {}", command);
 iofileoutput.Format("{}\t{} done, processed {} commands, TPS: {:.3}", QOUtil::local_tstamp(), TaskCmd::GenerateCommandsDB, processed.load(), tps);
 Output().Format(QOOutput::LogFile, "      Prohibit Sales CC DB contains {} flight legs. Flights departed before {:.10} removed: {}", retained, past, removed);
+ParmList().Format("GetLegsDuplicate: {}{:04}-{:02}-{:02} {}-{} {:.3}-{:.3} refers to non existing {}{} on {} utc", GetAirline(legs->AirlineNum()).Code(), static_cast<int>(legs->FlightNumber()), legs->Ivi(), legs->IviPrivate(), GetLegsDate(legs->Fromday(), buf_fday), GetLegsDate(legs->Untilday(), buf_uday),legs->From()->Code(), legs->To()->Code(), GetAirline(AirlineNums(la)).Code(), static_cast<int>(flight_number_with_suffix.m_flightnumber), GetLegsDate(utcdate, buf_day));
+ Output().Format(QOOutput::LogFile, "Invalid qop {}: {}", symbolic,  command);

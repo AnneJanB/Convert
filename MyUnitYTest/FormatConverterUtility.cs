@@ -59,27 +59,21 @@ namespace FormatConverter
             stdFormatString = stdFormatString.Replace("__PERCENT__", "%");
 
             // Handle %.*s pattern for std::string_view
-            bool hasStringViewPattern = stdFormatString.Contains("%.*s");
-            if (hasStringViewPattern)
-            {
-                stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{}");
-                // Remove the corresponding size and data arguments for %.*s
-                remainingArgs = Regex.Replace(remainingArgs, @"(\w+)\.size\(\)\s*,\s*", "");
-                remainingArgs = Regex.Replace(remainingArgs, @"(\w+)\.data\(\)\s*,?\s*", "$1");
-            }
+            stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{}");
+            remainingArgs = Regex.Replace(remainingArgs, @"(\w+)\.size\(\)\s*,\s*(\w+)\.data\(\)\s*,?", "$2, ");
 
             // Remove all .c_str() in remainingArgs
             remainingArgs = Regex.Replace(remainingArgs, @"\.c_str\(\)", "");
 
-            // Omit firstArg and the comma if firstArg is "QOOutput::OutNormal"
+            // Omit firstArg and the comma if firstArg is empty or "QOOutput::OutNormal"
             string formattedCall;
             if (string.IsNullOrEmpty(firstArg) || firstArg == "QOOutput::OutNormal")
             {
-                formattedCall = $"{beforeOutputArg}Format(\"{stdFormatString}\", {remainingArgs});";
+                formattedCall = $"{beforeOutputArg}Format(\"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
             }
             else
             {
-                formattedCall = $"{beforeOutputArg}Format({firstArg}, \"{stdFormatString}\", {remainingArgs});";
+                formattedCall = $"{beforeOutputArg}Format({firstArg}, \"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
             }
 
             return formattedCall;

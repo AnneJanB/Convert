@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using stdole;
 using Task = System.Threading.Tasks.Task;
 
 namespace FormatConverter
@@ -52,36 +51,80 @@ namespace FormatConverter
             if (dte == null)
                 return;
 
+            // Show dialog to choose between all open documents or all documents in the project
+           // var result = MessageBox.Show("Do you want to process all open documents? Click 'No' to process all documents in the project.", "Choose Documents", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+          //  if (result == DialogResult.Cancel)
+          //     return;
+
+            bool processOpenDocuments = true; //result == DialogResult.Yes;
+
             int conversionCount = 0;
             int fileCount = 0;
 
-            // Loop through all open documents
-            foreach (Document doc in dte.Documents)
+            if (processOpenDocuments)
             {
-                TextDocument textDoc = doc.Object("TextDocument") as TextDocument;
-                if (textDoc != null)
+                // Loop through all open documents
+                foreach (Document doc in dte.Documents)
                 {
-                    EditPoint start = textDoc.StartPoint.CreateEditPoint();
-                    string documentText = start.GetText(textDoc.EndPoint);
-
-                    // Apply regex transformation for OutputArg to Format
-                    string updatedText = Regex.Replace(documentText, Constants.OutputArgPattern, match =>
-                    {
-                        conversionCount++;
-                        return FormatConverterUtility.ConvertOutputArgToFormat(match);
-                    }, RegexOptions.Singleline);
-
-                    // If the document content has changed, update the document
-                    if (updatedText != documentText)
-                    {
-                        start.ReplaceText(textDoc.EndPoint, updatedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
-                        fileCount++;
-                    }
+                    ProcessDocument(doc, ref conversionCount, ref fileCount);
+                }
+            }
+            else
+            {
+                // Loop through all documents in the project
+                foreach (Project project in dte.Solution.Projects)
+                {
+                    ProcessProjectItems(project.ProjectItems, ref conversionCount, ref fileCount);
                 }
             }
 
             // Show a message box with the number of conversions and files processed
             MessageBox.Show($"{conversionCount} OutputArg instances have been converted in {fileCount} files.", "Conversion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ProcessDocument(Document doc, ref int conversionCount, ref int fileCount)
+        {
+            TextDocument textDoc = doc.Object("TextDocument") as TextDocument;
+            if (textDoc != null)
+            {
+                EditPoint start = textDoc.StartPoint.CreateEditPoint();
+                string documentText = start.GetText(textDoc.EndPoint);
+
+                int localConversionCount = 0;
+
+                // Apply regex transformation for OutputArg to Format
+                string updatedText = Regex.Replace(documentText, Constants.OutputArgPattern, match =>
+                {
+                    localConversionCount++;
+                    return FormatConverterUtility.ConvertOutputArgToFormat(match);
+                }, RegexOptions.Singleline);
+
+                // If the document content has changed, update the document
+                if (updatedText != documentText)
+                {
+                    start.ReplaceText(textDoc.EndPoint, updatedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
+                    fileCount++;
+                }
+
+                conversionCount += localConversionCount;
+            }
+        }
+
+        private void ProcessProjectItems(ProjectItems projectItems, ref int conversionCount, ref int fileCount)
+        {
+            foreach (ProjectItem item in projectItems)
+            {
+                if (item.Document != null)
+                {
+                    ProcessDocument(item.Document, ref conversionCount, ref fileCount);
+                }
+
+                if (item.ProjectItems != null && item.ProjectItems.Count > 0)
+                {
+                    ProcessProjectItems(item.ProjectItems, ref conversionCount, ref fileCount);
+                }
+            }
         }
     }
 }
