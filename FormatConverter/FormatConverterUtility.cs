@@ -36,14 +36,18 @@ namespace FormatConverter
                 // Add colon if width/precision is present or if typeSpecifier is x or X
                 if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
                 {
-                    widthPrecision = ":" + widthPrecision;
+                   if (string.IsNullOrEmpty(widthPrecision))
+                   {
+                      widthPrecision = "#";
+                   }
+                   widthPrecision = ":" + widthPrecision;
                 }
 
                 // Determine the appropriate replacement
                 switch (typeSpecifier)
                 {
-                    case "x": return $"{{{widthPrecision}#x}}";
-                    case "X": return $"{{{widthPrecision}#X}}";
+                    case "x": return $"{{{widthPrecision}x}}";
+                    case "X": return $"{{{widthPrecision}X}}";
                     case "f": return $"{{{widthPrecision}f}}";
                     case "d":
                     case "s":

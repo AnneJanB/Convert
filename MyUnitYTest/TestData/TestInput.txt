@@ -1,3 +1,4 @@
+QONumaMemory::Output().OutputArg(QOOutput::OutNormal, "QOProfiler::ThreadSnap::Run(%04x): SuspendThread Failed %s", ThreadId(), QOString::LastErrorAsString().c_str());
 QONumaMemory::Output().OutputArg(QOOutput::OutNormal, "Second PdhEnumObjectItems failed with %x.", status);
 ParmList().OutputArg("Ok %s Done %i records", filename, recnum);
 ParmList().OutputArg(QOOutput::OutNormal, "Ok %s Done %i records", filename, recnum);
