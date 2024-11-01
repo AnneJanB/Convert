@@ -36,10 +36,6 @@ namespace FormatConverter
                 // Add colon if width/precision is present or if typeSpecifier is x or X
                 if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
                 {
-                   if (string.IsNullOrEmpty(widthPrecision))
-                   {
-                      widthPrecision = "#";
-                   }
                    widthPrecision = ":" + widthPrecision;
                 }
 

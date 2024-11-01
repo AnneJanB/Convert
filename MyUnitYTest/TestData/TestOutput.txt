@@ -1,6 +1,6 @@
 output.Format("QOPerfCount::Init() SetPath failed {}, Error: {}", m_counter_path,  m_error);
 QONumaMemory::Output().Format("QOProfiler::ThreadSnap::Run({:04x}): SuspendThread Failed {}", ThreadId(), QOString::LastErrorAsString());
-QONumaMemory::Output().Format("Second PdhEnumObjectItems failed with {:#x}.", status);
+QONumaMemory::Output().Format("Second PdhEnumObjectItems failed with {:x}.", status);
 ParmList().Format("Ok {} Done {} records", filename, recnum);
 ParmList().Format("Ok {} Done {} records", filename, recnum);
 ParmList().Format("{}:{:02}:{:02}.{:03} No of condensed LegsPlus objects = {} which is {}% of the original number {}", elapse.m_hrs, elapse.m_mins, elapse.m_secs, elapse.m_millies, condense, (int)(100 * condense / legsbeforecondense), legsbeforecondense);
