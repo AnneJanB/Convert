@@ -18,7 +18,7 @@ namespace FormatConverter
       formatString = formatString.Replace("%%", "__PERCENT__");
 
       // Check if there are any format specifiers left in the format string
-      bool hasFormatSpecifiers = (Regex.IsMatch(formatString, @"%[^%]") || formatString.Contains("&s")) && !string.IsNullOrWhiteSpace(remainingArgs);
+      bool hasFormatSpecifiers = (Regex.IsMatch(formatString, @"%[^%]") || !string.IsNullOrWhiteSpace(remainingArgs));
       // If there are no format specifiers, use Output instead of Format
       if (!hasFormatSpecifiers)
       {
