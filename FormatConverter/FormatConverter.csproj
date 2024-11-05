@@ -76,7 +76,6 @@
     <Compile Include="FormatConverterPackage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Constants.rtf" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

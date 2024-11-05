@@ -62,8 +62,16 @@ namespace FormatConverter
       // Handle %.*s pattern for std::string_view
       if (stdFormatString.Contains("%.*s"))
       {
-        stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{}");
+        string originalRemainingArgs = remainingArgs;
         remainingArgs = Regex.Replace(remainingArgs, @"(\w+)\.size\(\)\s*,\s*(\w+)\.data\(\)\s*,?", "$2, ");
+        if (remainingArgs != originalRemainingArgs)
+        {
+          stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{}");
+        }
+        else
+        {
+          stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{_FIX%.*s:.{}}");
+        }
       }
 
       // Replace &s with {} in the format string

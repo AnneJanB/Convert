@@ -1,0 +1,18 @@
+void AVSReader::MQOpenConnection()
+{
+  m_avsQueue.setQueueName(ParmList().GetString(c_mq_queue_name, parm_list::MustExist));
+  m_avsQueue.setQmgrName(ParmList().GetString(c_mq_manager_name, parm_list::MustExist));
+  m_avsQueue.setChannelName(ParmList().GetString(c_mq_channel_name, parm_list::MustExist));
+  m_avsQueue.setConnectionName(ParmList().GetString(c_mq_connection_name, parm_list::MustExist));
+  
+  Output().OutputArg(QOOutput::LogFile, "AVSReader: AVS Queue connecting...\n"
+    "AVS connected to queue: %.50s\n"
+    "Channel name:           %.50s\n"
+    "Queue manager name:     %.50s\n"
+    "Connection name:        %.50s",
+    
+	m_avsQueue.getQueueName().c_str(),
+    m_avsQueue.getChannelName().c_str(),
+    m_avsQueue.getQmgrName().c_str(),
+    m_avsQueue.getConnectionName().c_str()
+  );
