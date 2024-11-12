@@ -1,0 +1,17 @@
+Output().OutputArg(QOOutput::LogFile, "No Template: %.*s", command.size(), command.data());
+Output().OutputArg(QOOutput::LogFile, "AVSReader: MQ message rejected - fourth line too short\n%.*s", DataLength(), DataPointer());
+output.OutputArg(QOOutput::OutNormal,"QOPerfCount::Init() SetPath failed %.*s, Error: %s", m_counter_path.size(), m_counter_path.data(), m_error.c_str());
+QONumaMemory::Output().OutputArg(QOOutput::OutNormal, "QOProfiler::ThreadSnap::Run(%04x): SuspendThread Failed %s", ThreadId(), QOString::LastErrorAsString().c_str());
+QONumaMemory::Output().OutputArg(QOOutput::OutNormal, "Second PdhEnumObjectItems failed with %x.", status);
+ParmList().OutputArg("Ok %s Done %i records", filename, recnum);
+ParmList().OutputArg(QOOutput::OutNormal, "Ok %s Done %i records", filename, recnum);
+ParmList().OutputArg(QOOutput::OutNormal,"%d:%02d:%02d.%03d No of condensed LegsPlus objects = %ld which is %d%% of the original number %ld", elapse.m_hrs, elapse.m_mins, elapse.m_secs, elapse.m_millies, condense, (int)(100 * condense / legsbeforecondense), legsbeforecondense);
+ParmList().OutputArg(QOOutput::OutNormal, "%s File %s, warming up", filename, ParmList().GetFilename(filename));
+ParmList().OutputArg(QOOutput::OutNormal, "!! No CCDCity file parameter is defined or cannot open the file");
+ParmList().OutputArg(QOOutput::OutNormal, "%s File %s, warming up", filename, ParmList().GetFilename(filename));
+ParmList().OutputArg(QOOutput::OutNormal, "!! %s Not done, %s, records read %i: %s", filename, recnum ? "an error detected" : "parameter not defined",recnum, exception.what());
+ParmList().OutputArg(QOOutput::OutNormal, "!! No CCDCity file parameter is defined or cannot open the file");
+iofileoutput.OutputArg(QOOutput::OutNormal, "%s\t%s done, processed %ld commands, TPS: %.3f", QOUtil::local_tstamp().c_str(), TaskCmd::GenerateCommandsDB, processed.load(), tps);
+Output().OutputArg(QOOutput::LogFile, "      Prohibit Sales CC DB contains %lu flight legs. Flights departed before %.10s removed: %lu", retained, past, removed);
+ParmList().OutputArg(QOOutput::OutNormal, "GetLegsDuplicate: %s%04hu-%02d-%02d %s-%s %.3s-%.3s refers to non existing %s%i on %s utc", GetAirline(legs->AirlineNum()).Code(), static_cast<int>(legs->FlightNumber()), legs->Ivi(), legs->IviPrivate(), GetLegsDate(legs->Fromday(), buf_fday), GetLegsDate(legs->Untilday(), buf_uday),legs->From()->Code(), legs->To()->Code(), GetAirline(AirlineNums(la)).Code(), static_cast<int>(flight_number_with_suffix.m_flightnumber), GetLegsDate(utcdate, buf_day));
+ Output().OutputArg(QOOutput::LogFile, "Invalid qop %.*s: %.*s", symbolic.size(), symbolic.data(), command.size(), command.data());

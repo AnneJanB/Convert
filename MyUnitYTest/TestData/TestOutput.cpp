@@ -1,0 +1,17 @@
+Output().Format(QOOutput::LogFile, "No Template: {}", command);
+Output().Format(QOOutput::LogFile, "AVSReader: MQ message rejected - fourth line too short\n{_FIX%.*s:.{}}", DataLength(), DataPointer());
+output.Format("QOPerfCount::Init() SetPath failed {}, Error: {}", m_counter_path,  m_error);
+QONumaMemory::Output().Format("QOProfiler::ThreadSnap::Run({:04x}): SuspendThread Failed {}", ThreadId(), QOString::LastErrorAsString());
+QONumaMemory::Output().Format("Second PdhEnumObjectItems failed with {:x}.", status);
+ParmList().Format("Ok {} Done {} records", filename, recnum);
+ParmList().Format("Ok {} Done {} records", filename, recnum);
+ParmList().Format("{}:{:02}:{:02}.{:03} No of condensed LegsPlus objects = {} which is {}% of the original number {}", elapse.m_hrs, elapse.m_mins, elapse.m_secs, elapse.m_millies, condense, (int)(100 * condense / legsbeforecondense), legsbeforecondense);
+ParmList().Format("{} File {}, warming up", filename, ParmList().GetFilename(filename));
+ParmList().Output(QOOutput::OutNormal, "!! No CCDCity file parameter is defined or cannot open the file");
+ParmList().Format("{} File {}, warming up", filename, ParmList().GetFilename(filename));
+ParmList().Format("!! {} Not done, {}, records read {}: {}", filename, recnum ? "an error detected" : "parameter not defined",recnum, exception.what());
+ParmList().Output(QOOutput::OutNormal, "!! No CCDCity file parameter is defined or cannot open the file");
+iofileoutput.Format("{}\t{} done, processed {} commands, TPS: {:.3f}", QOUtil::local_tstamp(), TaskCmd::GenerateCommandsDB, processed.load(), tps);
+Output().Format(QOOutput::LogFile, "      Prohibit Sales CC DB contains {} flight legs. Flights departed before {:.10} removed: {}", retained, past, removed);
+ParmList().Format("GetLegsDuplicate: {}{:04}-{:02}-{:02} {}-{} {:.3}-{:.3} refers to non existing {}{} on {} utc", GetAirline(legs->AirlineNum()).Code(), static_cast<int>(legs->FlightNumber()), legs->Ivi(), legs->IviPrivate(), GetLegsDate(legs->Fromday(), buf_fday), GetLegsDate(legs->Untilday(), buf_uday),legs->From()->Code(), legs->To()->Code(), GetAirline(AirlineNums(la)).Code(), static_cast<int>(flight_number_with_suffix.m_flightnumber), GetLegsDate(utcdate, buf_day));
+ Output().Format(QOOutput::LogFile, "Invalid qop {}: {}", symbolic,  command);
