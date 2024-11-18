@@ -38,7 +38,7 @@ namespace FormatConverter.Tests
             {
                 string result = Regex.Replace(testCase.Input, Constants.OutputArgPattern, match =>
                 {
-                    return FormatConverterUtility.ConvertOutputArgToFormat(match);
+                    return FormatConverterUtility.ConvertToFormat(match, Constants.Cmd_OutputArg);
                 }, RegexOptions.Singleline);
 
                 Assert.Equal(testCase.Expected, result);
@@ -60,7 +60,7 @@ namespace FormatConverter.Tests
 
                 string result = Regex.Replace(input, Constants.OutputArgPattern, match =>
                 {
-                    return FormatConverterUtility.ConvertOutputArgToFormat(match);
+                    return FormatConverterUtility.ConvertToFormat(match, Constants.Cmd_OutputArg);
                 }, RegexOptions.Singleline);
 
                 Assert.Equal(expected, result);

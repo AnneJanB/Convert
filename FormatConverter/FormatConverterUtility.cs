@@ -6,7 +6,7 @@ namespace FormatConverter
   public static class FormatConverterUtility
   {
     // Method to replace sprintf-style format specifiers with std::format-style ones
-    public static string ConvertOutputArgToFormat(Match match)
+    public static string ConvertToFormat(Match match, int id)
     {
       // Extract the parts of the match
       string beforeOutputArg = match.Groups[1].Value;  // Everything before OutputArg

@@ -13,11 +13,7 @@ namespace FormatConverter
 {
   internal sealed class MyCommand
   {
-    public const int Cmd_OutputArg = 0x0100;
-    public const int Cmd_AppendArg = 0x0101;
     public static readonly Guid CommandSet = new Guid("de14b296-430c-4caa-8009-387b7efa157a");
-    // Compile the regex pattern for better performance
-    private static readonly Regex OutputArgRegex = new Regex(Constants.OutputArgPattern, RegexOptions.Compiled | RegexOptions.Singleline);
 
     private readonly AsyncPackage package;
 
@@ -27,14 +23,15 @@ namespace FormatConverter
 
       if (commandService != null)
       {
-        var Cmd_OutputArgID = new CommandID(CommandSet, Cmd_OutputArg);
+        var Cmd_OutputArgID = new CommandID(CommandSet, Constants.Cmd_OutputArg);
         var menuItem = new MenuCommand(this.Execute, Cmd_OutputArgID);
         commandService.AddCommand(menuItem);
-
-        // Register another command
-        var Cmd_AppendArgID = new CommandID(CommandSet, Cmd_AppendArg);
-        var anotherMenuItem = new MenuCommand(this.ExecuteAnotherCommand, Cmd_AppendArgID);
-        commandService.AddCommand(anotherMenuItem);
+        var Cmd_AppendArgID = new CommandID(CommandSet, Constants.Cmd_AppendArg);
+        var menuItem2 = new MenuCommand(this.Execute, Cmd_AppendArgID);
+        commandService.AddCommand(menuItem2);
+        var Cmd_ExceptionArgID = new CommandID(CommandSet, Constants.Cmd_ExceptionArg);
+        var menuItem3 = new MenuCommand(this.Execute, Cmd_ExceptionArgID);
+        commandService.AddCommand(menuItem3);
       }
     }
 
@@ -51,6 +48,13 @@ namespace FormatConverter
     private void Execute(object sender, EventArgs e)
     {
       ThreadHelper.ThrowIfNotOnUIThread();
+      var menuCommand = sender as MenuCommand;
+      if (menuCommand == null)
+      {
+        return;
+      }
+
+      int commandId = menuCommand.CommandID.ID;
 
       DTE2 dte = ThreadHelper.JoinableTaskFactory.Run(async () =>
       {
@@ -59,6 +63,12 @@ namespace FormatConverter
 
       if (dte == null)
         return;
+
+      // Show dialog to choose between all open documents or all documents in the project
+      // var result = MessageBox.Show("Do you want to process all open documents? Click 'No' to process all documents in the project.", "Choose Documents", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+      //  if (result == DialogResult.Cancel)
+      //     return;
 
       bool processOpenDocuments = true; //result == DialogResult.Yes;
 
@@ -70,7 +80,7 @@ namespace FormatConverter
         // Loop through all open documents
         foreach (Document doc in dte.Documents)
         {
-          ProcessDocument(doc, ref conversionCount, ref fileCount);
+          ProcessDocument(doc, ref conversionCount, ref fileCount, commandId);
         }
       }
       else
@@ -78,23 +88,26 @@ namespace FormatConverter
         // Loop through all documents in the project
         foreach (Project project in dte.Solution.Projects)
         {
-          ProcessProjectItems(project.ProjectItems, ref conversionCount, ref fileCount);
+          ProcessProjectItems(project.ProjectItems, ref conversionCount, ref fileCount, commandId);
         }
       }
 
       // Show a message box with the number of conversions and files processed
-      MessageBox.Show($"{conversionCount} OutputArg instances have been converted in {fileCount} files.", "Conversion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      if (commandId == Constants.Cmd_OutputArg)
+      {
+        MessageBox.Show($"{conversionCount} OutputArg instances have been converted in {fileCount} files.", "Conversion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      }
+      else if (commandId == Constants.Cmd_AppendArg)
+      {
+        MessageBox.Show($"{conversionCount} AppendArg instances have been converted in {fileCount} files.", "Conversion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      }
+      else if (commandId == Constants.Cmd_ExceptionArg)
+      {
+        MessageBox.Show($"{conversionCount} ExceptionArg instances have been converted in {fileCount} files.", "Conversion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      }
     }
 
-    private void ExecuteAnotherCommand(object sender, EventArgs e)
-    {
-      ThreadHelper.ThrowIfNotOnUIThread();
-
-      // Implement the logic for the new command here
-      MessageBox.Show("Another command executed!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void ProcessDocument(Document doc, ref int conversionCount, ref int fileCount)
+    private void ProcessDocument(Document doc, ref int conversionCount, ref int fileCount, int id)
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       TextDocument textDoc = doc.Object("TextDocument") as TextDocument;
@@ -110,6 +123,13 @@ namespace FormatConverter
 
         // Split the document into chunks based on the ';' delimiter
         string[] chunks = documentText.Split(';');
+        string pattern = id switch
+        {
+            Constants.Cmd_OutputArg => Constants.OutputArgPattern,
+            Constants.Cmd_AppendArg => Constants.AppendArgPattern,
+            Constants.Cmd_ExceptionArg => Constants.ExceptionArgPattern,
+            _ => throw new InvalidOperationException("Unknown command ID")
+        };
 
         for (int i = 0; i < chunks.Length; i++)
         {
@@ -120,11 +140,11 @@ namespace FormatConverter
             chunk += ";";
           }
 
-          // Use Regex.Replace with Constants.OutputArgPattern to find and replace matches within the chunk
-          string updatedChunk = Regex.Replace(chunk, Constants.OutputArgPattern, match =>
+          // Use Regex.Replace with Pattern to find and replace matches within the chunk
+          string updatedChunk = Regex.Replace(chunk, pattern, match =>
           {
             localConversionCount++;
-            return FormatConverterUtility.ConvertOutputArgToFormat(match);
+            return FormatConverterUtility.ConvertToFormat(match, id);
           }, RegexOptions.Singleline);
           // Append the updated chunk to the StringBuilder
           updatedTextBuilder.Append(updatedChunk);
@@ -143,7 +163,7 @@ namespace FormatConverter
       }
     }
 
-    private void ProcessProjectItems(ProjectItems projectItems, ref int conversionCount, ref int fileCount)
+    private void ProcessProjectItems(ProjectItems projectItems, ref int conversionCount, ref int fileCount, int id)
     {
       ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -151,12 +171,12 @@ namespace FormatConverter
       {
         if (item.Document != null)
         {
-          ProcessDocument(item.Document, ref conversionCount, ref fileCount);
+          ProcessDocument(item.Document, ref conversionCount, ref fileCount, id);
         }
 
         if (item.ProjectItems != null && item.ProjectItems.Count > 0)
         {
-          ProcessProjectItems(item.ProjectItems, ref conversionCount, ref fileCount);
+          ProcessProjectItems(item.ProjectItems, ref conversionCount, ref fileCount, id);
         }
       }
     }

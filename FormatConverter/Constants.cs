@@ -4,10 +4,13 @@ namespace FormatConverter
 {
     public static class Constants
     {
-      
+      public const int Cmd_OutputArg = 0x0100;  //must map to ID_OutputArg in .vsct file
+      public const int Cmd_AppendArg = 0x0101;  //must map to ID_AppendArg in .vsct file
+      public const int Cmd_ExceptionArg = 0x0102;  //must map to ID_AppendArg in .vsct file
+ 
       public const string OutputArgPattern = @"(.*?)(OutputArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
-    //  public const string OutputArgPatternOk = @"(.*?)(OutputArg\(\s*(?:(.*?),\s*)?""(.*?)""\s*(?:,\s*(.*?)\s*)?\)\s*;)"; //ok multiline format string
-    // public const string OutputArgPatternNok = @"(.*?)(OutputArg\(\s*(?:([^,]*?)\s*,\s*)?""((?:[^""]*""\s*""[^""]*)|[^""]*)""(?:\s*,\s*(.*?))?\s*\);)"; //ok no multiline format string
+      public const string AppendArgPattern = @"(.*?)(AppendArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
+      public const string ExceptionArgPattern = @"(.*?)(ExcpetionArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
     }
 }
 /*
