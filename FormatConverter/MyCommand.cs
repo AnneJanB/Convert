@@ -13,7 +13,8 @@ namespace FormatConverter
 {
   internal sealed class MyCommand
   {
-    public const int CommandId = 0x0100;
+    public const int Cmd_OutputArg = 0x0100;
+    public const int Cmd_AppendArg = 0x0101;
     public static readonly Guid CommandSet = new Guid("de14b296-430c-4caa-8009-387b7efa157a");
     // Compile the regex pattern for better performance
     private static readonly Regex OutputArgRegex = new Regex(Constants.OutputArgPattern, RegexOptions.Compiled | RegexOptions.Singleline);
@@ -26,9 +27,14 @@ namespace FormatConverter
 
       if (commandService != null)
       {
-        var menuCommandID = new CommandID(CommandSet, CommandId);
-        var menuItem = new MenuCommand(this.Execute, menuCommandID);
+        var Cmd_OutputArgID = new CommandID(CommandSet, Cmd_OutputArg);
+        var menuItem = new MenuCommand(this.Execute, Cmd_OutputArgID);
         commandService.AddCommand(menuItem);
+
+        // Register another command
+        var Cmd_AppendArgID = new CommandID(CommandSet, Cmd_AppendArg);
+        var anotherMenuItem = new MenuCommand(this.ExecuteAnotherCommand, Cmd_AppendArgID);
+        commandService.AddCommand(anotherMenuItem);
       }
     }
 
@@ -54,12 +60,6 @@ namespace FormatConverter
       if (dte == null)
         return;
 
-      // Show dialog to choose between all open documents or all documents in the project
-      // var result = MessageBox.Show("Do you want to process all open documents? Click 'No' to process all documents in the project.", "Choose Documents", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-
-      //  if (result == DialogResult.Cancel)
-      //     return;
-
       bool processOpenDocuments = true; //result == DialogResult.Yes;
 
       int conversionCount = 0;
@@ -84,6 +84,14 @@ namespace FormatConverter
 
       // Show a message box with the number of conversions and files processed
       MessageBox.Show($"{conversionCount} OutputArg instances have been converted in {fileCount} files.", "Conversion Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void ExecuteAnotherCommand(object sender, EventArgs e)
+    {
+      ThreadHelper.ThrowIfNotOnUIThread();
+
+      // Implement the logic for the new command here
+      MessageBox.Show("Another command executed!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void ProcessDocument(Document doc, ref int conversionCount, ref int fileCount)
