@@ -88,6 +88,7 @@ namespace FormatConverter
 
     private void ProcessDocument(Document doc, ref int conversionCount, ref int fileCount)
     {
+      ThreadHelper.ThrowIfNotOnUIThread();
       TextDocument textDoc = doc.Object("TextDocument") as TextDocument;
       if (textDoc != null)
       {
@@ -96,59 +97,6 @@ namespace FormatConverter
 
         int localConversionCount = 0;
 
-        // Apply regex transformation for OutputArg to Format using the compiled regex
-        /*string updatedText = OutputArgRegex.Replace(documentText, match =>
-        {
-          localConversionCount++;
-          return FormatConverterUtility.ConvertOutputArgToFormat(match);
-        });*/
-        // Apply regex transformation for OutputArg to Format
-        //   string updatedText = Regex.Replace(documentText, Constants.OutputArgPattern, match =>
-        //   {
-        //     localConversionCount++;
-        //     return FormatConverterUtility.ConvertOutputArgToFormat(match);
-        //   }, RegexOptions.Singleline);
-
-        // Find all matches
-        /*  StringBuilder updatedTextBuilder = new StringBuilder();
-             int lastIndex = 0;
-
-              // Process the document in chunks to avoid processing the entire document at once
-             const int chunkSize = 4096; // Adjust chunk size as needed
-             int currentIndex = 0;
-
-             while (currentIndex < documentText.Length)
-             {
-                 int length = Math.Min(chunkSize, documentText.Length - currentIndex);
-                 string chunk = documentText.Substring(currentIndex, length);
-
-                 // Use Regex.Match in a loop to find and replace matches incrementally within the chunk
-                 Match match = OutputArgRegex.Match(chunk);
-                 while (match.Success)
-                 {
-                     // Append text before the match
-                     updatedTextBuilder.Append(chunk, lastIndex, match.Index - lastIndex);
-
-                     // Append the replacement
-                     string replacement = FormatConverterUtility.ConvertOutputArgToFormat(match);
-                     updatedTextBuilder.Append(replacement);
-
-                     localConversionCount++;
-                     lastIndex = match.Index + match.Length;
-
-                     // Find the next match
-                     match = OutputArgRegex.Match(chunk, lastIndex);
-                 }
-
-                 // Append the remaining text after the last match in the chunk
-                 updatedTextBuilder.Append(chunk, lastIndex, chunk.Length - lastIndex);
-
-                 currentIndex += chunkSize;
-                 lastIndex = 0; // Reset lastIndex for the next chunk
-             }
-
-             string updatedText = updatedTextBuilder.ToString();
-     */
         // Split the document into chunks based on the ';' delimiter
         StringBuilder updatedTextBuilder = new StringBuilder();
 
@@ -189,6 +137,8 @@ namespace FormatConverter
 
     private void ProcessProjectItems(ProjectItems projectItems, ref int conversionCount, ref int fileCount)
     {
+      ThreadHelper.ThrowIfNotOnUIThread();
+
       foreach (ProjectItem item in projectItems)
       {
         if (item.Document != null)
