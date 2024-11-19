@@ -162,7 +162,6 @@ namespace FormatConverter
         conversionCount += localConversionCount;
       }
     }
-
     private void ProcessProjectItems(ProjectItems projectItems, ref int conversionCount, ref int fileCount, int id)
     {
       ThreadHelper.ThrowIfNotOnUIThread();
