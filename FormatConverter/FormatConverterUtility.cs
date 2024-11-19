@@ -20,16 +20,16 @@ namespace FormatConverter
 
       // Check if there are any format specifiers left in the format string
       bool hasFormatSpecifiers = (Regex.IsMatch(formatString, @"%[^%]") || !string.IsNullOrWhiteSpace(remainingArgs));
-      // If there are no format specifiers, use Output instead of Format
-      string no_args_replace = id switch
-        {
-            Constants.Cmd_OutputArg => "Output",
-            Constants.Cmd_AppendArg => "Append",
-            Constants.Cmd_ExceptionArg => "TException",
-            _ => throw new InvalidOperationException("Unknown command ID")
-        };
       if (!hasFormatSpecifiers)
       {
+        // If there are no format specifiers, use alternative non Format-style function
+        string no_args_replace = id switch
+        {
+          Constants.Cmd_OutputArg => "Output",
+          Constants.Cmd_AppendArg => "Append",
+          Constants.Cmd_ExceptionArg => "TException",
+          _ => throw new InvalidOperationException("Unknown command ID")
+        };
         return $"{beforeOutputArg}{no_args_replace}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
       }
 
@@ -48,7 +48,7 @@ namespace FormatConverter
           widthPrecision = ":" + widthPrecision;
         }
 
-        // Determine the appropriate replacement
+        // Determine the appropriate replacementn typeSpecifier
         switch (typeSpecifier)
         {
           case "x": return $"{{{widthPrecision}x}}";
@@ -64,9 +64,7 @@ namespace FormatConverter
         }
       });
 
-      // Step 4: Replace the unique placeholder back to %
-      stdFormatString = stdFormatString.Replace("__PERCENT__", "%");
-
+  
       // Handle %.*s pattern for std::string_view
       if (stdFormatString.Contains("%.*s"))
       {
@@ -78,17 +76,20 @@ namespace FormatConverter
         }
         else
         {
-          stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{_FIX%.*s:.{}}");
+          stdFormatString = Regex.Replace(stdFormatString, @"%(\.\*)s", "{_FIX.*s:.{}}");
         }
       }
 
-      // Replace &s with {} in the format string
-      stdFormatString = stdFormatString.Replace("&s", "{}");
-
+      if (Regex.IsMatch(stdFormatString, @"%[^%]"))  //stiil a % sign
+      {
+        stdFormatString = stdFormatString.Replace("%", "{_FIX%}");
+      }
+      // Step 4: Replace the unique placeholder back to %
+      stdFormatString = stdFormatString.Replace("__PERCENT__", "%");
+         
       // Remove all .c_str() in remainingArgs
       remainingArgs = Regex.Replace(remainingArgs, @"\.c_str\(\)", "");
 
-      // Omit firstArg and the comma if firstArg is empty or "QOOutput::OutNormal"
       string replace_value = id switch
         {
             Constants.Cmd_OutputArg => "Format",
@@ -98,6 +99,7 @@ namespace FormatConverter
         };
   
       string formattedCall;
+      // Omit firstArg and the comma if firstArg is empty or "QOOutput::OutNormal"
       
       if (string.IsNullOrEmpty(firstArg) || firstArg == "QOOutput::OutNormal")
       {
