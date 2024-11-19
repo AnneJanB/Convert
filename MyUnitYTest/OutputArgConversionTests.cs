@@ -48,8 +48,8 @@ namespace FormatConverter.Tests
         public void TestOutputArgConversionFIle()
         {
             // Read test cases from files
-            var inputLines = File.ReadAllLines("../../../TestData/TestInput.txt");
-            var expectedLines = File.ReadAllLines("../../../TestData/TestOutput.txt");
+            var inputLines = File.ReadAllLines("../../../TestData/InputOutputArg.cpp");
+            var expectedLines = File.ReadAllLines("../../../TestData/OutputOutputArg.cpp");
 
             Assert.Equal(inputLines.Length, expectedLines.Length);
 

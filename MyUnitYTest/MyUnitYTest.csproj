@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestData\TestInput.txt" />
+    <None Remove="TestData\TestOutput.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\FormatConverter\Constants.cs" Link="Constants.cs" />
     <Compile Include="..\FormatConverter\FormatConverterUtility.cs" Link="FormatConverterUtility.cs" />
   </ItemGroup>

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -20,9 +21,16 @@ namespace FormatConverter
       // Check if there are any format specifiers left in the format string
       bool hasFormatSpecifiers = (Regex.IsMatch(formatString, @"%[^%]") || !string.IsNullOrWhiteSpace(remainingArgs));
       // If there are no format specifiers, use Output instead of Format
+      string no_args_replace = id switch
+        {
+            Constants.Cmd_OutputArg => "Output",
+            Constants.Cmd_AppendArg => "Append",
+            Constants.Cmd_ExceptionArg => "TException",
+            _ => throw new InvalidOperationException("Unknown command ID")
+        };
       if (!hasFormatSpecifiers)
       {
-        return $"{beforeOutputArg}Output({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
+        return $"{beforeOutputArg}{no_args_replace}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
       }
 
       // Step 2: Remove the hh|h|l|ll|z|j|t prefixes
@@ -81,10 +89,19 @@ namespace FormatConverter
       remainingArgs = Regex.Replace(remainingArgs, @"\.c_str\(\)", "");
 
       // Omit firstArg and the comma if firstArg is empty or "QOOutput::OutNormal"
+      string replace_value = id switch
+        {
+            Constants.Cmd_OutputArg => "Format",
+            Constants.Cmd_AppendArg => "FormatAppend",
+            Constants.Cmd_ExceptionArg => "TExceptionFormat",
+            _ => throw new InvalidOperationException("Unknown command ID")
+        };
+  
       string formattedCall;
+      
       if (string.IsNullOrEmpty(firstArg) || firstArg == "QOOutput::OutNormal")
       {
-        formattedCall = $"{beforeOutputArg}Format(\"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
+        formattedCall = $"{beforeOutputArg}{replace_value}(\"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
       }
       else
       {
