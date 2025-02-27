@@ -10,7 +10,7 @@ namespace FormatConverter
  
       public const string OutputArgPattern = @"(.*?)(OutputArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
       public const string AppendArgPattern = @"(.*?)(AppendArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
-      public const string ExceptionArgPattern = @"(.*?)(ExcpetionArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
+      public const string ExceptionArgPattern = @"(.*?)(TExceptionArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
     }
 }
 /*

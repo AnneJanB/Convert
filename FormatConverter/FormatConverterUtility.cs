@@ -107,7 +107,7 @@ namespace FormatConverter
       }
       else
       {
-        formattedCall = $"{beforeOutputArg}Format({firstArg}, \"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
+        formattedCall = $"{beforeOutputArg}{replace_value}({firstArg}, \"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
       }
 
       return formattedCall;
