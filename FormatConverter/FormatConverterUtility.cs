@@ -31,6 +31,10 @@ namespace FormatConverter
           Constants.Cmd_ExceptionArg => "TException",
           _ => throw new InvalidOperationException("Unknown command ID")
         };
+        if (string.IsNullOrEmpty(firstArg))
+        {
+          return $"{beforeCmdArg}{no_args_replace}(\"{formatString.Replace("__PERCENT__", "%")}\");";
+        }
         return $"{beforeCmdArg}{no_args_replace}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
       }
 
@@ -52,6 +56,8 @@ namespace FormatConverter
         // Determine the appropriate replacementn typeSpecifier
         switch (typeSpecifier)
         {
+          case "p": return $"{{{widthPrecision}x}}";
+          case "P": return $"{{{widthPrecision}X}}";
           case "x": return $"{{{widthPrecision}x}}";
           case "X": return $"{{{widthPrecision}X}}";
           case "f": return $"{{{widthPrecision}f}}";

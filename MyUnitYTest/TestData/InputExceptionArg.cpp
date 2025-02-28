@@ -1,5 +1,5 @@
+throw TExceptionArg("soep");
 TExceptionArg error("(%#p) wrong heap alloc: %s, free: %s, size: %u, no: %u, thread %x", pointer, mem_block->m_heap->Name(), Name(), mem_block->Size(), mem_block->AllocationNo(), tid);
-throw TExcpetionArg("soep");
 TExceptionArg error(ex, "Error ExecuteAsync %s", ex.what());
 TExceptionArg(ex, "ProRateMatching failed: %s", ex.what()).Report();
 throw TExceptionArg("Agreement expected %d parameters, found %d: %s", EParmsCount, args.GetCount(), input);
