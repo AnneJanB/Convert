@@ -1,3 +1,4 @@
+TExceptionArg exception("AllinFareFinder::QuoteCombination, Error in CalculateServicesFees function");
 throw TExceptionArg("soep");
 TExceptionArg error("(%#p) wrong heap alloc: %s, free: %s, size: %u, no: %u, thread %x", pointer, mem_block->m_heap->Name(), Name(), mem_block->Size(), mem_block->AllocationNo(), tid);
 TExceptionArg error(ex, "Error ExecuteAsync %s", ex.what());

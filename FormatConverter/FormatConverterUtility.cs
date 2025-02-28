@@ -33,9 +33,9 @@ namespace FormatConverter
         };
         if (string.IsNullOrEmpty(firstArg))
         {
-          return $"{beforeCmdArg}{no_args_replace}(\"{formatString.Replace("__PERCENT__", "%")}\");";
+          return $"{beforeCmdArg}{no_args_replace}{afterCmdArg}(\"{formatString.Replace("__PERCENT__", "%")}\");";
         }
-        return $"{beforeCmdArg}{no_args_replace}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
+        return $"{beforeCmdArg}{no_args_replace}{afterCmdArg}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
       }
 
       // Step 2: Remove the hh|h|l|ll|z|j|t prefixes
