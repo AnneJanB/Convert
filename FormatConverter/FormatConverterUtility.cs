@@ -10,10 +10,11 @@ namespace FormatConverter
     public static string ConvertToFormat(Match match, int id)
     {
       // Extract the parts of the match
-      string beforeOutputArg = match.Groups[1].Value;  // Everything before OutputArg
-      string firstArg = match.Groups[3].Success ? match.Groups[3].Value : ""; // First argument (optional)
-      string formatString = match.Groups[4].Value;     // Format string (e.g., "TaskMonitor::ExecuteLogFile Script %s aborted")
-      string remainingArgs = match.Groups[5].Value;    // Remaining arguments (e.g., input.Filename(), more parameters)
+      string beforeCmdArg = match.Groups[1].Value;  // Everything before OutputArg
+      string afterCmdArg = match.Groups[3].Success ? match.Groups[3].Value : ""; // First argument (optional)
+      string firstArg = match.Groups[4].Success ? match.Groups[4].Value : ""; // First argument (optional)
+      string formatString = match.Groups[5].Value;     // Format string (e.g., "TaskMonitor::ExecuteLogFile Script %s aborted")
+      string remainingArgs = match.Groups[6].Value;    // Remaining arguments (e.g., input.Filename(), more parameters)
 
       // Step 1: Replace double %% with a unique placeholder
       formatString = formatString.Replace("%%", "__PERCENT__");
@@ -30,7 +31,7 @@ namespace FormatConverter
           Constants.Cmd_ExceptionArg => "TException",
           _ => throw new InvalidOperationException("Unknown command ID")
         };
-        return $"{beforeOutputArg}{no_args_replace}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
+        return $"{beforeCmdArg}{no_args_replace}({firstArg}, \"{formatString.Replace("__PERCENT__", "%")}\");";
       }
 
       // Step 2: Remove the hh|h|l|ll|z|j|t prefixes
@@ -80,7 +81,7 @@ namespace FormatConverter
         }
       }
 
-      if (Regex.IsMatch(stdFormatString, @"%[^%]"))  //stiil a % sign
+      if (Regex.IsMatch(stdFormatString, @"%[^%]"))  //still a % sign
       {
         stdFormatString = stdFormatString.Replace("%", "{_FIX%}");
       }
@@ -103,15 +104,14 @@ namespace FormatConverter
       
       if (string.IsNullOrEmpty(firstArg) || firstArg == "QOOutput::OutNormal")
       {
-        formattedCall = $"{beforeOutputArg}{replace_value}(\"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
+        formattedCall = $"{beforeCmdArg}{replace_value}{afterCmdArg}(\"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
       }
       else
       {
-        formattedCall = $"{beforeOutputArg}{replace_value}({firstArg}, \"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
+        formattedCall = $"{beforeCmdArg}{replace_value}{afterCmdArg}({firstArg}, \"{stdFormatString}\", {remainingArgs.TrimEnd(' ', ',')});";
       }
 
       return formattedCall;
     }
-
   }
 }

@@ -8,9 +8,9 @@ namespace FormatConverter
       public const int Cmd_AppendArg = 0x0101;  //must map to ID_AppendArg in .vsct file
       public const int Cmd_ExceptionArg = 0x0102;  //must map to ID_AppendArg in .vsct file
  
-      public const string OutputArgPattern = @"(.*?)(OutputArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
-      public const string AppendArgPattern = @"(.*?)(AppendArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
-      public const string ExceptionArgPattern = @"(.*?)(TExceptionArg\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
+      public const string OutputArgPattern = @"(.*?)(OutputArg(\s*.*?)\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
+      public const string AppendArgPattern = @"(.*?)(AppendArg(\s*.*?)\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
+      public const string ExceptionArgPattern = @"(.*?)(TExceptionArg(\s*.*?)\(\s*(?:([^,]*?)\s*,\s*)?""((?s:.*?))""(?:\s*,\s*(.*?))?\s*\);)";
     }
 }
 /*
