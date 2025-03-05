@@ -48,27 +48,31 @@ namespace FormatConverter
         string typeSpecifier = match2.Groups[3].Value;
 
         // Add colon if width/precision is present or if typeSpecifier is x or X
-        if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
+        if (typeSpecifier == "%")
         {
-          widthPrecision = ":" + widthPrecision;
+          return typeSpecifier; // Handle single % separately
         }
 
-        // Determine the appropriate replacementn typeSpecifier
-        switch (typeSpecifier)
+        typeSpecifier = typeSpecifier switch
         {
-          case "p": return $"{{{widthPrecision}x}}";
-          case "P": return $"{{{widthPrecision}X}}";
-          case "x": return $"{{{widthPrecision}x}}";
-          case "X": return $"{{{widthPrecision}X}}";
-          case "f": return $"{{{widthPrecision}f}}";
-          case "d":
-          case "s":
-          case "i":
-          case "u":
-            return $"{{{widthPrecision}}}";
-          case "%": return "%"; // Handle single % separately
-          default: return $"{{{widthPrecision}}}";
+          "p" => "x",
+          "P" => "X",
+          _ => typeSpecifier
+        };
+      
+        if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
+        {
+          typeSpecifier = typeSpecifier switch //ommit defaults
+          {
+            "d" => "",
+            "s" => "",
+            "u" => "",
+            "i" => "",
+            _ => typeSpecifier
+          };
+          widthPrecision = ":" + widthPrecision + typeSpecifier;
         }
+        return $"{{{widthPrecision}}}";
       });
 
   

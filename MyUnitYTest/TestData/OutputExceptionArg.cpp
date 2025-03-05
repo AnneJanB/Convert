@@ -1,3 +1,4 @@
+throw TExceptionFormat("Conversion value should be in range [0.0, 1.0]: {}", m_conversion);
 TException exception("AllinFareFinder::QuoteCombination, Error in CalculateServicesFees function");
 throw TException("soep");
 TExceptionFormat error("({:#x}) wrong heap alloc: {}, free: {}, size: {}, no: {}, thread {:x}", pointer, mem_block->m_heap->Name(), Name(), mem_block->Size(), mem_block->AllocationNo(), tid);
