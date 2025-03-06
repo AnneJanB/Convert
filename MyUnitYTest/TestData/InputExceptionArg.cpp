@@ -10,3 +10,4 @@ throw TExceptionArg("Agreement expected %d parameters, found %d: %s", EParmsCoun
 TExceptionArg("Incompatible QOQ file: 0x%x, expected 0x%x", qoq_stamp, EOTHId).Report();
 throw TExceptionArg("Wrong tax unit tag9 %c", input.m_taxable_unit_tag9);
 TExceptionArg(ex, "Exception: %s: ExecuteFile: %s : executing %s", ex.what(), input.Filename(), input.Buf()).Report(Output());
+TExceptionArg(ex, "Value: %f: ExecuteFile: %s : executing %s", 3.14 , input.Filename(), input.Buf()).Report(Output());

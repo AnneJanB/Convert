@@ -70,6 +70,11 @@ namespace FormatConverter
             "i" => "",
             _ => typeSpecifier
           };
+          if (!string.IsNullOrEmpty(widthPrecision) && (typeSpecifier == "f" || typeSpecifier == "F"))
+          {
+            widthPrecision = ".6";
+          }
+
           widthPrecision = ":" + widthPrecision + typeSpecifier;
         }
         return $"{{{widthPrecision}}}";
