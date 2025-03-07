@@ -59,26 +59,28 @@ namespace FormatConverter
           "P" => "X",
           _ => typeSpecifier
         };
-      
-        if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
-        {
-          typeSpecifier = typeSpecifier switch //ommit defaults
-          {
-            "d" => "",
-            "s" => "",
-            "u" => "",
-            "i" => "",
-            _ => typeSpecifier
-          };
-          if (!string.IsNullOrEmpty(widthPrecision) && (typeSpecifier == "f" || typeSpecifier == "F"))
-          {
-            widthPrecision = ".6";
-          }
 
+        if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
+          typeSpecifier = typeSpecifier switch //omit defaults
+        {
+          "d" => "",
+          "s" => "",
+          "u" => "",
+          "i" => "",
+          _ => typeSpecifier
+        };
+
+        if (string.IsNullOrEmpty(widthPrecision) && (typeSpecifier == "f" || typeSpecifier == "F"))
+        {
+          widthPrecision = ".6"; //align with sprintf default
+        }
+
+        if (!string.IsNullOrEmpty(widthPrecision))
+        {
           widthPrecision = ":" + widthPrecision + typeSpecifier;
         }
         return $"{{{widthPrecision}}}";
-      });
+    });
 
   
       // Handle %.*s pattern for std::string_view
