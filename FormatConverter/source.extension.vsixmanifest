@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="FormatConverter.65ee481d-843d-42d0-aeb6-be83d2f6f13f" Version="2025.0308" Language="en-US" Publisher="Anne Jan Beeks" />
+        <Identity Id="FormatConverter.65ee481d-843d-42d0-aeb6-be83d2f6f13f" Version="2025.0310" Language="en-US" Publisher="Anne Jan Beeks" />
         <DisplayName>FormatConverter</DisplayName>
         <Description xml:space="preserve">Format Converter</Description>
     </Metadata>

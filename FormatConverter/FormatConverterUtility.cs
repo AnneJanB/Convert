@@ -60,7 +60,7 @@ namespace FormatConverter
           _ => typeSpecifier
         };
 
-        if (!string.IsNullOrEmpty(widthPrecision) || typeSpecifier == "x" || typeSpecifier == "X")
+        if (!string.IsNullOrEmpty(widthPrecision))
           typeSpecifier = typeSpecifier switch //omit defaults
         {
           "d" => "",
@@ -75,7 +75,7 @@ namespace FormatConverter
           widthPrecision = ".6"; //align with sprintf default
         }
 
-        if (!string.IsNullOrEmpty(widthPrecision))
+        if (!string.IsNullOrEmpty(widthPrecision) || (typeSpecifier == "x" || typeSpecifier == "X"))
         {
           widthPrecision = ":" + widthPrecision + typeSpecifier;
         }
