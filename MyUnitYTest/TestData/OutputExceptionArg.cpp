@@ -1,4 +1,4 @@
-throw TExceptionFormat("Conversion value should be in range [0.0, 1.0]: {}", m_conversion);
+throw TExceptionFormat("Conversion value should be in range [0.0, 1.0]: {:.6f}", m_conversion);
 TException exception("AllinFareFinder::QuoteCombination, Error in CalculateServicesFees function");
 throw TException("soep");
 TExceptionFormat error("({:#x}) wrong heap alloc: {}, free: {}, size: {}, no: {}, thread {:x}", pointer, mem_block->m_heap->Name(), Name(), mem_block->Size(), mem_block->AllocationNo(), tid);
@@ -10,3 +10,4 @@ throw TExceptionFormat("Agreement expected {} parameters, found {}: {}", EParmsC
 TExceptionFormat("Incompatible QOQ file: 0x{:x}, expected 0x{:x}", qoq_stamp, EOTHId).Report();
 throw TExceptionFormat("Wrong tax unit tag9 {}", input.m_taxable_unit_tag9);
 TExceptionFormat(ex, "Exception: {}: ExecuteFile: {} : executing {}", ex.what(), input.Filename(), input.Buf()).Report(Output());
+TExceptionFormat(ex, "Value: {:.6f}: ExecuteFile: {} : executing {}", 3.14 , input.Filename(), input.Buf()).Report(Output());
